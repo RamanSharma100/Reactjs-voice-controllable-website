@@ -2,6 +2,8 @@
 
 This is voice controlled website version 1.0.
 
+This is having more than 35+ commands
+
 ## Commands:-
 
 
