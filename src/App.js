@@ -13,6 +13,7 @@ import Search from "./components/Search";
 import CurrentVideo from "./components/CurrentVideo";
 import OpenVideoHome from "./components/OpenVideo/OpenVideoHome";
 import Videos from "./components/Videos";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   const [greet, setGreet] = useState(false);
@@ -226,6 +227,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <ToastContainer />
       {instructionsScreen && (
         <InstructionScreen
           setInstructionScreen={setInstructionScreen}

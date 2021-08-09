@@ -11,6 +11,8 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 import videoDetailReducer from "./redux/reducers/videoDetails";
 
+import "react-toastify/dist/ReactToastify.css";
+
 const reducers = combineReducers({
   videos: videosReducer,
   videoDetail: videoDetailReducer,

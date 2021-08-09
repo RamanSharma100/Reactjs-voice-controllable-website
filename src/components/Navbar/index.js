@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   return (
@@ -30,9 +31,16 @@ const Navbar = () => {
           </NavLink>
         </li>
         <li className="nav-item ml-5">
-          <Link to="/search" className="btn btn-outline-light btn-sm mt-1">
+          <button
+            type="button"
+            className="btn btn-outline-light btn-sm mt-1"
+            onClick={() => toast.info("This feature will come in next update!")}
+          >
             <i className="fa fa-search"></i> Search
-          </Link>
+          </button>
+          {/* <Link to="/search" className="btn btn-outline-light btn-sm mt-1">
+            <i className="fa fa-search"></i> Search
+          </Link> */}
         </li>
       </ul>
     </nav>

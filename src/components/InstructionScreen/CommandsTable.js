@@ -27,7 +27,7 @@ const CommandsTable = ({ cols, rows }) => {
                 ))
               ) : (
                 <p className="text-center small bg-dark text-white py-1 px-2">
-                  {data.command[0]}
+                  {data.commands[0]}
                 </p>
               )}
             </td>
