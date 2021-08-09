@@ -1,8 +1,13 @@
 .instructions {
-  position: absolute !important;
+  position: fixed !important;
   top: 0;
   height: 100%;
   width: 100%;
   left: 0;
   background-color: rgba(0, 0, 0, 0.493);
+  z-index: 999999;
+  .card {
+    height: 90%;
+    overflow: auto;
+  }
 }

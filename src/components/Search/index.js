@@ -1,18 +1,6 @@
-import React, { useEffect } from "react";
-import { speak } from "../../api/voiceRecognition";
+import React from "react";
 
-const Search = ({ setStopReco, setGreet }) => {
-  useEffect(() => {
-    setStopReco(true);
-    setGreet(true);
-    speak(
-      "This is a search page. You can search here anything by typing, or by voice",
-      true,
-      true,
-      setGreet,
-      setStopReco
-    );
-  }, []);
+const Search = () => {
   return <div>Search</div>;
 };
 

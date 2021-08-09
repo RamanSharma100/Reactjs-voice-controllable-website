@@ -1,7 +1,9 @@
 const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
+  window.SpeechRecognition || window.webkitSpeechRecognition || false;
+if (!SpeechRecognition) {
+  console.log("not allowed");
+}
 export const recognition = new SpeechRecognition();
-
 export const speak = (
   message,
   stopReco = false,

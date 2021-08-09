@@ -4,11 +4,29 @@ import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.scss";
+import { Provider } from "react-redux";
+import { applyMiddleware, combineReducers, createStore } from "redux";
+import videosReducer from "./redux/reducers/videosReducer";
+import { composeWithDevTools } from "redux-devtools-extension";
+import thunk from "redux-thunk";
+import videoDetailReducer from "./redux/reducers/videoDetails";
+
+const reducers = combineReducers({
+  videos: videosReducer,
+  videoDetail: videoDetailReducer,
+});
+
+const store = createStore(
+  reducers,
+  composeWithDevTools(applyMiddleware(thunk))
+);
 
 ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
+  <Provider store={store}>
+    <Router>
+      <App />
+    </Router>
+  </Provider>,
   document.getElementById("root")
 );
 
