@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import { recognition, speak } from "./api/voiceRecognition";
 import { addVideos } from "./redux/actionCreators/videosActionCreator";
+import { toast, ToastContainer } from "react-toastify";
 
 import "./App.scss";
 
@@ -13,7 +14,8 @@ import Search from "./components/Search";
 import CurrentVideo from "./components/CurrentVideo";
 import OpenVideoHome from "./components/OpenVideo/OpenVideoHome";
 import Videos from "./components/Videos";
-import { toast, ToastContainer } from "react-toastify";
+import About from "./components/About/About";
+import Contact from "./components/Contact/Contact";
 
 const App = () => {
   const [greet, setGreet] = useState(false);
@@ -437,6 +439,8 @@ const App = () => {
             />
           )}
         />
+        <Route path="/about" component={() => <About />} />
+        <Route path="/contact" component={() => <Contact />} />
         <Route path="/search">
           <Search setStopReco={setStopReco} setGreet={setGreet} />
         </Route>

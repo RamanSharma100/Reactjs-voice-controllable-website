@@ -160,6 +160,49 @@ const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
           />
           {/* end go back/next route or by history of the page commands  */}
 
+          {/* scrolling commands  */}
+          <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
+            Scrolling commands
+          </p>
+          <CommandsTable
+            cols={["commands", "use"]}
+            rows={[
+              {
+                commands: [
+                  "go bottom",
+                  "go to bottom",
+                  "go top",
+                  "go to top",
+                  "go to half",
+                  "go to half of the page",
+                  "scroll to half",
+                  "scroll to bottom/top",
+                  "scroll/move by <_number_> px/pixel/percentage/percent/%",
+                  "scroll/move to <_number_> px/pixel/percentage/percent/%",
+                  "scroll up/down",
+                  "move up/down",
+                ],
+                info: "This will help you to scroll the page <br/> Example:- go bottom, go to bottom, scroll to bottom, scroll to bottom, scroll to 10%, scroll by 10px ",
+              },
+            ]}
+          />
+          {/* end scrolling commands  */}
+
+          {/* open commands table  */}
+          <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
+            Open Commands Table command
+          </p>
+          <CommandsTable
+            cols={["commands", "use"]}
+            rows={[
+              {
+                commands: ["open commands table"],
+                info: "This will help you to open commands table ",
+              },
+            ]}
+          />
+          {/* end open commands table  */}
+
           <button
             type="button"
             onClick={() => {
