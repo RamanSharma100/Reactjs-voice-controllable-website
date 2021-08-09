@@ -13,17 +13,22 @@ import Search from "./components/Search";
 import CurrentVideo from "./components/CurrentVideo";
 import OpenVideoHome from "./components/OpenVideo/OpenVideoHome";
 import Videos from "./components/Videos";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const App = () => {
   const [greet, setGreet] = useState(false);
-  const [stopReco, setStopReco] = useState(true);
+  const [stopReco, setStopReco] = useState(false);
   const [instructionsScreen, setInstructionScreen] = useState(true);
   const [openVideoHome, setOpenVideoHome] = useState(false);
   const [selectedVideos, setSelectedVideos] = useState([]);
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(12);
   const [countPages, setCountPages] = useState(1);
+
+  // const scrollLocation = window.pageYOffset;
+  const maxScroll =
+    document.documentElement.scrollHeight -
+    document.documentElement.clientHeight;
 
   const history = useHistory();
   const { videosLoading, videos, popularVideos } = useSelector(
@@ -77,7 +82,7 @@ const App = () => {
 
     if (
       command.startsWith("navigate") ||
-      (command.startsWith("go to") && !command.includes("search"))
+      (command.startsWith("navigate to") && !command.includes("search"))
     ) {
       let pageName;
       if (command.endsWith("page") || command.endsWith("route")) {
@@ -219,15 +224,187 @@ const App = () => {
         prevPage();
       }
     }
+
+    // stop recogniton and taking commands
+    if (command === "stop recognition" || command === "stop taking commands") {
+      recognition.stop();
+      setStopReco(true);
+      toast.dark("Taking commands stopped!");
+    }
+
+    // scrolling commands
+    if (
+      command == "scroll down" ||
+      command == "scrolldown" ||
+      command == "go down" ||
+      command == "godown"
+    ) {
+      window.scrollBy(0, 100);
+    } else if (
+      command == "scroll up" ||
+      command == "scrollup" ||
+      command == "go up" ||
+      command == "goup"
+    ) {
+      window.scrollBy(0, -100);
+    } else if (
+      command == "go to top" ||
+      command == "go top" ||
+      command == "scroll to top" ||
+      command == "gotop" ||
+      command == "scrolltotop" ||
+      command == "gototop"
+    ) {
+      window.scrollTo(0, 0);
+    } else if (
+      command == "go to bottom" ||
+      command == "go bottom" ||
+      command == "scroll to bottom" ||
+      command == "gobottom" ||
+      command == "scrolltobottom" ||
+      command == "gotobottom"
+    ) {
+      window.scrollTo(0, maxScroll);
+    } else if (
+      command == "go to half" ||
+      command == "gotohalf" ||
+      command == "go to half of the page" ||
+      command == "scroll to half"
+    ) {
+      window.scrollTo(0, document.body.scrollHeight / 2);
+    } else if (
+      command.includes("scroll to") ||
+      command.includes("move to") ||
+      command.includes("scroll by") ||
+      command.includes("move by") ||
+      command.includes("scroll") ||
+      command.includes("move")
+    ) {
+      let pert;
+      if (
+        command.includes("percentage") ||
+        command.includes("percent") ||
+        command.includes("%")
+      ) {
+        if (command.includes("percentage")) {
+          pert = command.split("percentage");
+        }
+        if (command.includes("%")) {
+          pert = command.split("%");
+        }
+        if (command.includes("percent")) {
+          pert = command.split("percent");
+        }
+        const number = pert[0].trim().split(" ").reverse()[0];
+        if (
+          number !== "undefined" &&
+          number !== null &&
+          !/^[a-zA-Z].*/.test(number)
+        ) {
+          window.scrollTo(0, (parseInt(number) / 100) * maxScroll);
+        }
+      }
+      if (
+        command.includes("pixel") ||
+        command.includes("pixels") ||
+        command.includes("px")
+      ) {
+        if (command.includes("pixels")) {
+          pert = command.split("pixels");
+        }
+        if (command.includes("pixel")) {
+          pert = command.split("pixel");
+        }
+        if (command.includes("px")) {
+          pert = command.split("px");
+        }
+        const number = pert[0].trim().split(" ").reverse()[0];
+        if (
+          number !== "undefined" &&
+          number !== null &&
+          !/^[a-zA-Z].*/.test(number)
+        ) {
+          if (command.includes("up") || command.includes("down")) {
+            if (pert[1].trim() === "up") {
+              window.scrollBy(0, -parseInt(number));
+            }
+            if (pert[1].trim() === "down") {
+              window.scrollBy(0, parseInt(number));
+            }
+          } else {
+            window.scrollTo(0, parseInt(number));
+          }
+        }
+      }
+    }
+
+    // open commands table
+    if (command === "open commands table") {
+      if (!stopReco) {
+        recognition.stop();
+        toast.dark("Stopped Taking commands!");
+      }
+      setStopReco(true);
+      setInstructionScreen(true);
+      toast.dark(
+        "Click on next or close button to start taking commands again!"
+      );
+    }
   };
 
   recognition.onend = () => {
-    recognition.start();
+    if (!stopReco) {
+      recognition.start();
+    }
   };
 
   return (
     <div className="App">
       <ToastContainer />
+      <div
+        className="d-flex flex-column align-items-center justify-content-center position-fixed"
+        style={{ zIndex: 99999, bottom: "5%", right: "30px" }}
+      >
+        <button
+          type="button"
+          onClick={() => {
+            setStopReco((prevStopReco) => !prevStopReco);
+            if (stopReco) {
+              recognition.start();
+              toast.dark("You can now give commands!");
+            } else {
+              recognition.stop();
+              toast.dark("Taking commands stopped!");
+            }
+          }}
+          className={`btn rounded-circle my-2 shadow  ${
+            stopReco ? "btn-danger" : "btn-primary"
+          }`}
+        >
+          {stopReco ? (
+            <i className="fa fa-microphone-slash"></i>
+          ) : (
+            <i className="fa fa-microphone"></i>
+          )}
+        </button>
+        <button
+          type="button"
+          className={`btn rounded-circle my-2 shadow btn-primary`}
+          onClick={() => {
+            if (!stopReco) {
+              recognition.stop();
+              toast.dark("Stopped Taking commands!");
+            }
+            setStopReco(true);
+            setInstructionScreen(true);
+            toast.dark(
+              "Click on next or close button to start taking commands again!"
+            );
+          }}
+        >
+          <i className="fa fa-table"></i>
+        </button>
+      </div>
       {instructionsScreen && (
         <InstructionScreen
           setInstructionScreen={setInstructionScreen}
@@ -263,6 +440,13 @@ const App = () => {
         <Route path="/search">
           <Search setStopReco={setStopReco} setGreet={setGreet} />
         </Route>
+        <Route
+          component={() => (
+            <h1 className="display-1 text-center my-5">
+              404 Page not found - say `go back`
+            </h1>
+          )}
+        />
       </Switch>
     </div>
   );

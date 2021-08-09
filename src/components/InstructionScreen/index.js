@@ -17,6 +17,7 @@ const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
             onClick={() => {
               setInstructionScreen(false);
               recognition.start();
+              setStopReco(false);
             }}
           >
             &times;
