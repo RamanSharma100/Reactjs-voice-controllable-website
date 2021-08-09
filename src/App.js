@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar";
 import Search from "./components/Search";
 import CurrentVideo from "./components/CurrentVideo";
 import OpenVideoHome from "./components/OpenVideo/OpenVideoHome";
+import Videos from "./components/Videos";
 
 const App = () => {
   const [greet, setGreet] = useState(false);
@@ -19,6 +20,9 @@ const App = () => {
   const [instructionsScreen, setInstructionScreen] = useState(true);
   const [openVideoHome, setOpenVideoHome] = useState(false);
   const [selectedVideos, setSelectedVideos] = useState([]);
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(12);
+  const [countPages, setCountPages] = useState(1);
 
   const history = useHistory();
   const { videosLoading, videos, popularVideos } = useSelector(
@@ -29,6 +33,7 @@ const App = () => {
     }),
     shallowEqual
   );
+  let pages = Math.ceil(videos?.length / 12);
 
   const dispatch = useDispatch();
 
@@ -40,6 +45,17 @@ const App = () => {
       setGreet,
       setStopReco
     );
+  };
+
+  const prevPage = () => {
+    setStart((prevStart) => prevStart - 12);
+    setEnd((prevEnd) => prevEnd - 12);
+    setCountPages((prevCountPage) => prevCountPage - 1);
+  };
+  const nextPage = () => {
+    setStart((prevStart) => prevStart + 12);
+    setEnd((prevEnd) => prevEnd + 12);
+    setCountPages((prevCountPage) => prevCountPage + 1);
   };
 
   useEffect(() => {
@@ -55,6 +71,8 @@ const App = () => {
 
   recognition.onresult = (event) => {
     const command = event.results[0][0].transcript;
+
+    // navigation
 
     if (
       command.startsWith("navigate") ||
@@ -83,13 +101,30 @@ const App = () => {
       }
     }
 
+    // video selection
+
     if (command.startsWith("open video")) {
       if (window.location.pathname === "/") {
         if (command.includes("from")) {
           const currentCommand = command;
-          const videoNo = currentCommand.match(/\d+/);
+          let videoNo = currentCommand.match(/\d+/);
+          if (command.includes("one")) {
+            videoNo = "1";
+          }
           const Package = command.split("from").reverse()[0];
-          console.log(Package, command.match(/\d+/));
+          if (Package.trim() === "uploads") {
+            history.push(
+              `/video/${videos.slice(0, 5)[parseInt(videoNo - 1)].id.videoId}`
+            );
+          } else {
+            console.log(currentCommand);
+            console.log(popularVideos.slice(0, 5)[parseInt(videoNo - 1)]);
+            history.push(
+              `/video/${
+                popularVideos.slice(0, 5)[parseInt(videoNo - 1)].id.videoId
+              }`
+            );
+          }
         } else {
           const videoNo = command
             .split("video")
@@ -111,13 +146,76 @@ const App = () => {
             ]);
             setOpenVideoHome(true);
           } else {
-            history.push(
-              `/video/${selectedVideos[parseInt(videoNo - 1)].video.id.videoId}`
-            );
+            if (parseInt(videoNo) < 6 && parseInt(videoNo) > 0) {
+              history.push(
+                `/video/${
+                  selectedVideos[parseInt(videoNo - 1)].video.id.videoId
+                }`
+              );
+            }
             setSelectedVideos(false);
             setOpenVideoHome(false);
           }
         }
+      }
+      if (window.location.pathname === "/videos") {
+        const videoNo = command
+          .split("video")
+          .reverse()[0]
+          .split("")
+          .reverse()[0];
+
+        if (parseInt(videoNo) < 13 && parseInt(videoNo) > 0) {
+          history.push(
+            `/video/${
+              videos.slice(start, end)[parseInt(videoNo - 1)].id.videoId
+            }`
+          );
+        }
+        setSelectedVideos(false);
+        setOpenVideoHome(false);
+      }
+    }
+
+    // go back command
+    if (
+      command === "go back" ||
+      command === "go to previous page" ||
+      command === "go to prev page" ||
+      command === "go backward"
+    ) {
+      history.goBack();
+    }
+    // go next command
+    if (
+      command === "go next" ||
+      command === "go to next page" ||
+      command === "go forward"
+    ) {
+      history.goForward();
+    }
+
+    // next page videos
+    if (
+      (command === "next page" || command === "next") &&
+      window.location.pathname === "/videos"
+    ) {
+      console.log(pages);
+      if (countPages !== pages) {
+        nextPage();
+      }
+    }
+    // prev page videos
+
+    if (
+      (command === "prev page" ||
+        command === "previous page" ||
+        command === "prev" ||
+        command === "previous") &&
+      window.location.pathname === "/videos"
+    ) {
+      if (start > 0) {
+        prevPage();
       }
     }
   };
@@ -148,6 +246,18 @@ const App = () => {
         <Route exact path="/video/:id">
           <CurrentVideo />
         </Route>
+        <Route
+          path="/videos"
+          component={() => (
+            <Videos
+              start={start}
+              end={end}
+              nextPage={nextPage}
+              prevPage={prevPage}
+              countPages={countPages}
+            />
+          )}
+        />
         <Route path="/search">
           <Search setStopReco={setStopReco} setGreet={setGreet} />
         </Route>

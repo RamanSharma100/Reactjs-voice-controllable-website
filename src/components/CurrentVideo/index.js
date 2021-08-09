@@ -5,17 +5,13 @@ import { addVideoDetail } from "../../redux/actionCreators/videoDetailActionCrea
 
 const CurrentVideo = () => {
   const { id } = useParams();
-  const {
-    videoDeatilLoading,
-    videoDetail,
-    videosAll,
-    videosLoading,
-  } = useSelector((state) => ({
-    videoDeatilLoading: state.videoDetail.videoDetailLoading,
-    videoDetail: state.videoDetail.video,
-    videosAll: state.videos.videos,
-    videosLoading: state.videos.videosLoading,
-  }));
+  const { videoDeatilLoading, videoDetail, videosAll, videosLoading } =
+    useSelector((state) => ({
+      videoDeatilLoading: state.videoDetail.videoDetailLoading,
+      videoDetail: state.videoDetail.video,
+      videosAll: state.videos.videos,
+      videosLoading: state.videos.videosLoading,
+    }));
 
   const videos = videosAll.filter((video) => video.id.videoId !== id && video);
 
@@ -28,17 +24,17 @@ const CurrentVideo = () => {
   return (
     <div className="container-fluid">
       <div className="row m-5">
-        <div className="col-md-8 mx-auto">
+        <div className="col-md-10 mx-auto">
           {videoDeatilLoading ? (
             "Loading"
           ) : (
             <>
-              <div className="card mb-3">
+              <div className="card  mb-3">
                 <iframe
                   frameBorder="0"
-                  height="480"
+                  height="580"
                   src={`https://www.youtube.com/embed/${id}`}
-                  allowfullScreen
+                  allowFullScreen
                 ></iframe>
                 <div className="card-body px-5">
                   <div className="d-flex w-100 align-items-center justify-content-between">
@@ -75,69 +71,42 @@ const CurrentVideo = () => {
                   ))}
                 </div>
               </div>
-              <div className="d-flex flex-wrap">
-                {videosLoading
-                  ? "Loading"
-                  : videos.slice(9, videos.length).map((video, id) => (
-                      <div className="card col-md-6 px-0 mb-3" key={id + 250}>
-                        <img
-                          className="card-img-top"
-                          src={video.snippet.thumbnails.high.url}
-                          alt={video.snippet.title}
-                          height={video.snippet.thumbnails.high.height}
-                        />
-                        <div className="card-body">
-                          <h5 className="card-title text-justify">
-                            {video.snippet.title}
-                          </h5>
-                          <p className="card-text text-justify">
-                            {video.snippet.description}
-                          </p>
-                        </div>
-                        <div className="card-footer bg-white">
-                          <Link
-                            to={`/video/${video.id.videoId}`}
-                            className="btn btn-primary btn-block"
-                          >
-                            <i className="fa fa-eye"></i> See Video
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
-              </div>
             </>
           )}
         </div>
-        <div className="col-md-4 mx-auto">
-          {videosLoading
-            ? "Loading"
-            : videos.slice(0, 9).map((video, id) => (
-                <div className="card mb-3" key={id + 250}>
-                  <img
-                    className="card-img-top"
-                    src={video.snippet.thumbnails.high.url}
-                    alt={video.snippet.title}
-                    height={video.snippet.thumbnails.high.height}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title text-justify">
-                      {video.snippet.title}
-                    </h5>
-                    <p className="card-text text-justify">
-                      {video.snippet.description}
-                    </p>
-                  </div>
-                  <div className="card-footer bg-white">
-                    <Link
-                      to={`/video/${video.id.videoId}`}
-                      className="btn btn-primary btn-block"
-                    >
-                      <i className="fa fa-eye"></i> See Video
-                    </Link>
-                  </div>
+      </div>
+      <p className="display-3 text-center d-block py-4 border-bottom border-dark">
+        Related Videos
+      </p>
+      <div className="row mx-auto">
+        {videosLoading
+          ? "Loading"
+          : videos.map((video, id) => (
+              <div className="card px-0 col-md-4 mb-3" key={id + 250}>
+                <img
+                  className="card-img-top"
+                  src={video.snippet.thumbnails.high.url}
+                  alt={video.snippet.title}
+                  height={video.snippet.thumbnails.high.height}
+                />
+                <div className="card-body">
+                  <h5 className="card-title text-justify">
+                    {video.snippet.title}
+                  </h5>
+                  <p className="card-text text-justify">
+                    {video.snippet.description}
+                  </p>
                 </div>
-              ))}
-        </div>
+                <div className="card-footer bg-white">
+                  <Link
+                    to={`/video/${video.id.videoId}`}
+                    className="btn btn-primary btn-block"
+                  >
+                    <i className="fa fa-eye"></i> See Video
+                  </Link>
+                </div>
+              </div>
+            ))}
       </div>
     </div>
   );
