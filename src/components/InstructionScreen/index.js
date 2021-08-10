@@ -49,12 +49,12 @@ const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
             rows={[
               {
                 commands: [
-                  "Go to <_page_name_> page/route",
-                  "Go to <_page_name_>",
-                  "Go to <_route_name_> page/route",
-                  "Go to <_route_name_>",
+                  "Navigate to <_page_name_> page/route",
+                  "Navigate to <_page_name_>",
+                  "Navigate to <_route_name_> page/route",
+                  "Navigate to <_route_name_>",
                 ],
-                info: "This will help you to navigate to pages <br/> Example:- Go to Home/Index Page/route, Go to Home/Index, Go to video/videos page/route ",
+                info: "This will help you to navigate to pages <br/> Example:- Navigate to Home/Index Page/route, Navigate to Home/Index, Navigate to video/videos page/route ",
               },
             ]}
           />
