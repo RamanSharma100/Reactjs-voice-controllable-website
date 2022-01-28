@@ -11,20 +11,23 @@ export const speak = (
   setGreet,
   setStopReco
 ) => {
-  const speech = new window.SpeechSynthesisUtterance();
-  speech.text = message;
-  speech.pitch = 1;
-  speech.volume = 1;
+  const speech = new window.SpeechSynthesisUtterance(message);
+  // speech.text = message;
+  // speech.pitch = 1;
+  // speech.volume = 1;
 
-  if (stopReco) window.speechSynthesis.speak(speech);
+  if (stopReco) {
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(speech);
+  }
 
   speech.onend = () => {
     if (!greet) {
       setGreet(true);
     }
     if (greet && stopReco) {
-      setStopReco(false);
       recognition.start();
+      setStopReco(false);
     }
   };
 };

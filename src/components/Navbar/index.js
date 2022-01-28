@@ -31,16 +31,9 @@ const Navbar = () => {
           </NavLink>
         </li>
         <li className="nav-item ml-5">
-          <button
-            type="button"
-            className="btn btn-outline-light btn-sm mt-1"
-            onClick={() => toast.info("This feature will come in next update!")}
-          >
+          <Link to="/search" className="btn btn-outline-light btn-sm mt-1">
             <i className="fa fa-search"></i> Search
-          </button>
-          {/* <Link to="/search" className="btn btn-outline-light btn-sm mt-1">
-            <i className="fa fa-search"></i> Search
-          </Link> */}
+          </Link>
         </li>
       </ul>
     </nav>

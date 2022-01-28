@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useHistory } from "react-router-dom";
-import { recognition, speak } from "./api/voiceRecognition";
+import { recognition } from "./api/voiceRecognition";
 import { addVideos } from "./redux/actionCreators/videosActionCreator";
 import { toast, ToastContainer } from "react-toastify";
+import { useSpeechSynthesis } from "react-speech-kit";
 
 import "./App.scss";
 
@@ -27,6 +28,8 @@ const App = () => {
   const [end, setEnd] = useState(12);
   const [countPages, setCountPages] = useState(1);
 
+  const { speak } = useSpeechSynthesis();
+
   // const scrollLocation = window.pageYOffset;
   const maxScroll =
     document.documentElement.scrollHeight -
@@ -46,13 +49,9 @@ const App = () => {
   const dispatch = useDispatch();
 
   const Greet = async () => {
-    await speak(
-      "Welcome to the Voice controllable website. Please chekout the commands!. These commands will help you to controll website with voice!. Click on the Next button to start!.",
-      stopReco,
-      greet,
-      setGreet,
-      setStopReco
-    );
+    await speak({
+      text: "Welcome to the Voice controllable website. Please chekout the commands!. These commands will help you to controll website with voice!. Click on the Next button to start!.",
+    });
   };
 
   const prevPage = () => {
@@ -69,6 +68,7 @@ const App = () => {
   useEffect(() => {
     if (!greet) {
       Greet();
+      setGreet(true);
     }
     if (videosLoading) {
       dispatch(addVideos());
@@ -77,7 +77,7 @@ const App = () => {
 
   // recognition properties and commands
 
-  recognition.onresult = (event) => {
+  recognition.onresult = async (event) => {
     const command = event.results[0][0].transcript;
 
     // navigation
@@ -236,42 +236,42 @@ const App = () => {
 
     // scrolling commands
     if (
-      command == "scroll down" ||
-      command == "scrolldown" ||
-      command == "go down" ||
-      command == "godown"
+      command === "scroll down" ||
+      command === "scrolldown" ||
+      command === "go down" ||
+      command === "godown"
     ) {
       window.scrollBy(0, 100);
     } else if (
-      command == "scroll up" ||
-      command == "scrollup" ||
-      command == "go up" ||
-      command == "goup"
+      command === "scroll up" ||
+      command === "scrollup" ||
+      command === "go up" ||
+      command === "goup"
     ) {
       window.scrollBy(0, -100);
     } else if (
-      command == "go to top" ||
-      command == "go top" ||
-      command == "scroll to top" ||
-      command == "gotop" ||
-      command == "scrolltotop" ||
-      command == "gototop"
+      command === "go to top" ||
+      command === "go top" ||
+      command === "scroll to top" ||
+      command === "gotop" ||
+      command === "scrolltotop" ||
+      command === "gototop"
     ) {
       window.scrollTo(0, 0);
     } else if (
-      command == "go to bottom" ||
-      command == "go bottom" ||
-      command == "scroll to bottom" ||
-      command == "gobottom" ||
-      command == "scrolltobottom" ||
-      command == "gotobottom"
+      command === "go to bottom" ||
+      command === "go bottom" ||
+      command === "scroll to bottom" ||
+      command === "gobottom" ||
+      command === "scrolltobottom" ||
+      command === "gotobottom"
     ) {
       window.scrollTo(0, maxScroll);
     } else if (
-      command == "go to half" ||
-      command == "gotohalf" ||
-      command == "go to half of the page" ||
-      command == "scroll to half"
+      command === "go to half" ||
+      command === "gotohalf" ||
+      command === "go to half of the page" ||
+      command === "scroll to half"
     ) {
       window.scrollTo(0, document.body.scrollHeight / 2);
     } else if (
@@ -351,6 +351,40 @@ const App = () => {
       toast.dark(
         "Click on next or close button to start taking commands again!"
       );
+      await speak({ text: "Opening commands table" });
+    }
+
+    // search commands
+    if (command.includes("search video") || command.includes("search")) {
+      if (
+        command === "open search page" ||
+        command === "open search" ||
+        command === "search for me" ||
+        command === "search" ||
+        command === "search video"
+      ) {
+        history.push({ pathname: "/search", state: { text: "" } });
+        await speak({
+          text: "What do you want to search for? Say something like 'search for', followed by the keyword you want to search for,  or,  type it in the search bar ",
+        });
+      } else if (command.includes("search for")) {
+        const search = command.split("search for")[1].trim();
+        history.push({
+          pathname: "/search",
+          state: { text: search },
+        });
+        await speak({
+          text: `searching ${search} videos from youtube`,
+        });
+      } else {
+        history.push({
+          pathname: "/search",
+          state: { text: "" },
+        });
+        await speak({
+          text: `Please say command like 'search for', followed by the keyword you want to search for,  or,  type it in the search bar `,
+        });
+      }
     }
   };
 
@@ -442,7 +476,7 @@ const App = () => {
         <Route path="/about" component={() => <About />} />
         <Route path="/contact" component={() => <Contact />} />
         <Route path="/search">
-          <Search setStopReco={setStopReco} setGreet={setGreet} />
+          <Search setStopReco={setStopReco} />
         </Route>
         <Route
           component={() => (
