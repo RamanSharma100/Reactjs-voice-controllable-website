@@ -59,9 +59,7 @@ const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
             ]}
           />
           {/* end navigation commands */}
-
           {/* open video commands -home page  */}
-
           <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
             Open Video Commands - Home Page
           </p>
@@ -78,11 +76,8 @@ const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
               },
             ]}
           />
-
           {/* end open video commands - home page   */}
-
           {/* open video commands  - home page dialog box  */}
-
           <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
             Open Video Commands - Home Page Dialog Box
           </p>
@@ -95,11 +90,8 @@ const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
               },
             ]}
           />
-
           {/* end open video commands dialog box  */}
-
           {/* open video commands - videos page  */}
-
           <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
             Open Video Commands - Videos Page
           </p>
@@ -112,9 +104,7 @@ const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
               },
             ]}
           />
-
           {/* end open video commands - videos page  */}
-
           {/* next/prev page command - videos page  */}
           <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
             Open Next/Prev page of pagination - videos page
@@ -136,7 +126,6 @@ const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
             ]}
           />
           {/* end next/prev page command - videos page  */}
-
           {/* go back/next route or by history of the page commands  */}
           <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
             Go Back/Next Route/History of the application commands
@@ -159,7 +148,6 @@ const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
             ]}
           />
           {/* end go back/next route or by history of the page commands  */}
-
           {/* scrolling commands  */}
           <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
             Scrolling commands
@@ -187,8 +175,31 @@ const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
             ]}
           />
           {/* end scrolling commands  */}
-
           {/* open commands table  */}
+          <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
+            Search with voice commands
+          </p>
+          <CommandsTable
+            cols={["commands", "use"]}
+            rows={[
+              {
+                commands: [
+                  "open search page",
+                  "open search",
+                  "search for me",
+                  "search",
+                  "search video",
+                ],
+                info: "This will help you to open search page <br/> Example:- open search page, open search, search for me, search, search video",
+              },
+              {
+                commands: ["search for <_keyword_>"],
+                info: "This will help you to search for any keyword using voice <br/> Example:- search for web tutorials",
+              },
+            ]}
+          />
+          {/* end open commands table  */}
+          {/* voice search  */}
           <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
             Open Commands Table command
           </p>
@@ -201,8 +212,7 @@ const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
               },
             ]}
           />
-          {/* end open commands table  */}
-
+          {/* end voice search  */}
           <button
             type="button"
             onClick={() => {

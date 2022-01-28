@@ -348,10 +348,10 @@ const App = () => {
       }
       setStopReco(true);
       setInstructionScreen(true);
+      await speak({ text: "Opened Command Table" });
       toast.dark(
         "Click on next or close button to start taking commands again!"
       );
-      await speak({ text: "Opening commands table" });
     }
 
     // search commands
