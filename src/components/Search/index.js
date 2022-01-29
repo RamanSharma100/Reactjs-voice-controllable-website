@@ -7,11 +7,13 @@ const Search = ({ setStopReco }) => {
   const [searchText, setSearchText] = useState("");
   const [videos, setVideos] = useState([]);
   const [videosLoading, setVideosLoading] = useState(true);
+  const [typing, setTyping] = useState(false);
 
   const location = useLocation();
   const { speak } = useSpeechSynthesis();
 
   const searchVideos = (string) => {
+    setTyping(false);
     axios
       .get(process.env.React_App_Youtube_API, {
         params: {
@@ -53,7 +55,7 @@ const Search = ({ setStopReco }) => {
     <div className="container">
       <div className="row">
         <div className="col-md-12 pt-4 mx-auto">
-          {searchText ? (
+          {searchText && !typing ? (
             videosLoading ? (
               <h1 className="text-center">Searching {searchText}</h1>
             ) : (
@@ -92,11 +94,19 @@ const Search = ({ setStopReco }) => {
               <h1 className="text-center display-3 px-5 mb-4  font-weight-bold">
                 What Do You Want To Search?
               </h1>
-              <form className="form-group mt-5 border-bottom ">
+              <form
+                className="form-group mt-5 border-bottom "
+                onSubmit={() => searchVideos(searchText)}
+              >
                 <input
                   type="search"
                   className="form-control border-0 shadow-none"
                   placeholder="Search Here"
+                  onChange={(e) => {
+                    setTyping(true);
+                    setSearchText(e.target.value);
+                  }}
+                  value={searchText}
                 />
               </form>
             </>

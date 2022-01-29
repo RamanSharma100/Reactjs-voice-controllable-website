@@ -20,7 +20,7 @@ import Contact from "./components/Contact/Contact";
 
 const App = () => {
   const [greet, setGreet] = useState(false);
-  const [stopReco, setStopReco] = useState(false);
+  const [stopReco, setStopReco] = useState(true);
   const [instructionsScreen, setInstructionScreen] = useState(true);
   const [openVideoHome, setOpenVideoHome] = useState(false);
   const [selectedVideos, setSelectedVideos] = useState([]);
@@ -48,8 +48,8 @@ const App = () => {
 
   const dispatch = useDispatch();
 
-  const Greet = async () => {
-    await speak({
+  const Greet = () => {
+    speak({
       text: "Welcome to the Voice controllable website. Please chekout the commands!. These commands will help you to controll website with voice!. Click on the Next button to start!.",
     });
   };
@@ -66,14 +66,17 @@ const App = () => {
   };
 
   useEffect(() => {
+    if (videosLoading) {
+      dispatch(addVideos());
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
     if (!greet) {
       Greet();
       setGreet(true);
     }
-    if (videosLoading) {
-      dispatch(addVideos());
-    }
-  }, [greet, dispatch]);
+  }, [greet]);
 
   // recognition properties and commands
 
@@ -342,16 +345,28 @@ const App = () => {
 
     // open commands table
     if (command === "open commands table") {
-      if (!stopReco) {
-        recognition.stop();
-        toast.dark("Stopped Taking commands!");
-      }
-      setStopReco(true);
+      // if (stopReco) {
+      //   recognition.stop();
+      //   toast.dark("Stopped Taking commands!");
+      // }
+      setStopReco(false);
       setInstructionScreen(true);
       await speak({ text: "Opened Command Table" });
       toast.dark(
         "Click on next or close button to start taking commands again!"
       );
+    }
+    // close commands table
+    if (command === "close commands table") {
+      // if (!stopReco) {
+      //   recognition.stop();
+      //   recognition.start();
+      //   toast.dark("Started Taking commands!");
+      // }
+      setStopReco(false);
+      setInstructionScreen(false);
+      await speak({ text: "closed Command Table" });
+      toast.dark("Closed Command Table!");
     }
 
     // search commands
@@ -445,6 +460,7 @@ const App = () => {
         <InstructionScreen
           setInstructionScreen={setInstructionScreen}
           setStopReco={setStopReco}
+          stopReco={stopReco}
         />
       )}
       {openVideoHome && (

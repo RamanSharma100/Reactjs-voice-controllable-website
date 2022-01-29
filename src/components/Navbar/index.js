@@ -31,7 +31,10 @@ const Navbar = () => {
           </NavLink>
         </li>
         <li className="nav-item ml-5">
-          <Link to="/search" className="btn btn-outline-light btn-sm mt-1">
+          <Link
+            to={{ pathname: "/search", state: { text: "" } }}
+            className="btn btn-outline-light btn-sm mt-1"
+          >
             <i className="fa fa-search"></i> Search
           </Link>
         </li>

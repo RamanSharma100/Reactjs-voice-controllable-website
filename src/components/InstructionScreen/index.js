@@ -5,7 +5,7 @@ import "./style.scss";
 
 import CommandsTable from "./CommandsTable";
 
-const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
+const InstructionScreen = ({ stopReco, setInstructionScreen, setStopReco }) => {
   return (
     <div className="col-md-12 instructions">
       <div className="card col-md-6 mx-auto mt-5 px-5 py-2">
@@ -16,7 +16,9 @@ const InstructionScreen = ({ setInstructionScreen, setStopReco }) => {
             className="close mb-3"
             onClick={() => {
               setInstructionScreen(false);
-              recognition.start();
+              if (stopReco) {
+                recognition.start();
+              }
               setStopReco(false);
             }}
           >
