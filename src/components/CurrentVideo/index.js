@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import YouTube from "react-youtube";
 import { addVideoDetail } from "../../redux/actionCreators/videoDetailActionCreator";
 
-const CurrentVideo = () => {
+const CurrentVideo = ({ setVideoRef }) => {
   const { id } = useParams();
   const { videoDeatilLoading, videoDetail, videosAll, videosLoading } =
     useSelector((state) => ({
@@ -21,6 +22,14 @@ const CurrentVideo = () => {
     dispatch(addVideoDetail(id));
   }, [dispatch, id]);
 
+  const opts = {
+    height: "580",
+    width: "100%",
+    playerVars: {
+      autoplay: 1,
+    },
+  };
+
   return (
     <div className="container-fluid">
       <div className="row m-5">
@@ -30,12 +39,11 @@ const CurrentVideo = () => {
           ) : (
             <>
               <div className="card  mb-3">
-                <iframe
-                  frameBorder="0"
-                  height="580"
-                  src={`https://www.youtube.com/embed/${id}`}
-                  allowFullScreen
-                ></iframe>
+                <YouTube
+                  videoId={id}
+                  opts={opts}
+                  onReady={(event) => setVideoRef(event.target)}
+                />
                 <div className="card-body px-5">
                   <div className="d-flex w-100 align-items-center justify-content-between">
                     <p>{videoDetail.items[0].statistics.viewCount} Views</p>

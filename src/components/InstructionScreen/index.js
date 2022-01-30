@@ -107,6 +107,24 @@ const InstructionScreen = ({ stopReco, setInstructionScreen, setStopReco }) => {
             ]}
           />
           {/* end open video commands - videos page  */}
+          {/* controlling video commands - videos page  */}
+          <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
+            Controlling Video Commands
+          </p>
+          <CommandsTable
+            cols={["commands", "use"]}
+            rows={[
+              {
+                commands: ["play", "start", "play video", "start video"],
+                info: "Play video when it is paused",
+              },
+              {
+                commands: ["pause", "stop", "pause video", "stop video"],
+                info: "Pause video when it is playing",
+              },
+            ]}
+          />
+          {/* end controlling video commands - videos page  */}
           {/* next/prev page command - videos page  */}
           <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
             Open Next/Prev page of pagination - videos page

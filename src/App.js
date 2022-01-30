@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useHistory } from "react-router-dom";
 import { recognition } from "./api/voiceRecognition";
@@ -29,6 +29,8 @@ const App = () => {
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(12);
   const [countPages, setCountPages] = useState(1);
+
+  const [videoRef, setVideoRef] = useState();
 
   const { speak } = useSpeechSynthesis();
 
@@ -132,7 +134,21 @@ const App = () => {
     // video selection
 
     if (command.startsWith("open video")) {
+      if (command.replace("open video", "").trim() === "") {
+        return await speak({
+          text: "Please mention the video number also, or, video number with category",
+        });
+      }
       if (window.location.pathname === "/") {
+        if (
+          command.replace("open video", "").trim() !== "one" &&
+          (parseInt(command.replace("open video", "").trim()) < 1 ||
+            parseInt(command.replace("open video", "").trim()) > videos.length)
+        ) {
+          return await speak({
+            text: "This Video number is not avaliable. please select videos with number in the view range , that range is from, 1 to 5 , with in each category",
+          });
+        }
         if (command.includes("from")) {
           const currentCommand = command;
           let videoNo = currentCommand.match(/\d+/);
@@ -152,6 +168,9 @@ const App = () => {
                 popularVideos.slice(0, 5)[parseInt(videoNo - 1)].id.videoId
               }`
             );
+            await speak({
+              text: `opening video `,
+            });
           }
         } else {
           const videoNo = command
@@ -173,6 +192,9 @@ const App = () => {
               },
             ]);
             setOpenVideoHome(true);
+            await speak({
+              text: "Please select videos from categories given in dialog box",
+            });
           } else {
             if (parseInt(videoNo) < 6 && parseInt(videoNo) > 0) {
               history.push(
@@ -202,6 +224,27 @@ const App = () => {
         }
         setSelectedVideos(false);
         setOpenVideoHome(false);
+      }
+    }
+
+    // control videos
+    if (window.location.pathname.includes("/video/")) {
+      if (
+        command.includes("start") ||
+        command.includes("play") ||
+        command.includes("video") ||
+        command.includes("play video")
+      ) {
+        videoRef.playVideo();
+        console.log("working");
+      }
+      if (
+        command.includes("stop") ||
+        command.includes("pause") ||
+        command.includes("stop video") ||
+        command.includes("pause video")
+      ) {
+        videoRef.pauseVideo();
       }
     }
 
@@ -495,7 +538,7 @@ const App = () => {
           <Home />
         </Route>
         <Route exact path="/video/:id">
-          <CurrentVideo />
+          <CurrentVideo setVideoRef={setVideoRef} />
         </Route>
         <Route
           path="/videos"
