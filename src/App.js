@@ -5,6 +5,7 @@ import { recognition } from "./api/voiceRecognition";
 import { addVideos } from "./redux/actionCreators/videosActionCreator";
 import { toast, ToastContainer } from "react-toastify";
 import { useSpeechSynthesis } from "react-speech-kit";
+import { routes } from "./constants";
 
 import "./App.scss";
 
@@ -17,6 +18,7 @@ import OpenVideoHome from "./components/OpenVideo/OpenVideoHome";
 import Videos from "./components/Videos";
 import About from "./components/About/About";
 import Contact from "./components/Contact/Contact";
+import Page404 from "./components/Page404";
 
 const App = () => {
   const [greet, setGreet] = useState(false);
@@ -108,7 +110,22 @@ const App = () => {
           ? "contact"
           : pageName;
 
-        history.push(`/${pageName}`);
+        if (pageName === "search") {
+          history.push({ pathname: `/${pageName}`, state: { text: "" } });
+        } else {
+          history.push(`/${pageName}`);
+        }
+      }
+      if (routes.includes(pageName.toLowerCase())) {
+        await speak({ text: `Navigated to ${pageName} page` });
+      } else if (pageName.toLowerCase() === "search") {
+        await speak({
+          text: "What do you want to search for? Say something like 'search for', followed by the keyword you want to search for,  or,  type it in the search bar ",
+        });
+      } else {
+        await speak({
+          text: "This Page is not available. Please say 'go back', to go back",
+        });
       }
     }
 
@@ -344,7 +361,7 @@ const App = () => {
     }
 
     // open commands table
-    if (command === "open commands table") {
+    if (command === "open commands table" || command === "open command table") {
       // if (stopReco) {
       //   recognition.stop();
       //   toast.dark("Stopped Taking commands!");
@@ -357,7 +374,10 @@ const App = () => {
       );
     }
     // close commands table
-    if (command === "close commands table") {
+    if (
+      command === "close commands table" ||
+      command === "close command table"
+    ) {
       // if (!stopReco) {
       //   recognition.stop();
       //   recognition.start();
@@ -494,13 +514,7 @@ const App = () => {
         <Route path="/search">
           <Search setStopReco={setStopReco} />
         </Route>
-        <Route
-          component={() => (
-            <h1 className="display-1 text-center my-5">
-              404 Page not found - say `go back`
-            </h1>
-          )}
-        />
+        <Route component={Page404} />
       </Switch>
     </div>
   );
