@@ -61,6 +61,28 @@ const InstructionScreen = ({ stopReco, setInstructionScreen, setStopReco }) => {
             ]}
           />
           {/* end navigation commands */}
+          {/* form filling and submitting commands */}
+          <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
+            Navigation Commands
+          </p>
+          <CommandsTable
+            cols={["commands", "use"]}
+            rows={[
+              {
+                commands: [
+                  "Add <_field_name_> <_value_>",
+                  "Type <_field_name_> <_value_>",
+                  "Insert <_field_name_> <_value_>",
+                ],
+                info: "This will help you to insert value in the field <br/> Example:- Add name John, Type name John, Insert name John",
+              },
+              {
+                commands: ["Submit form", "Submit"],
+                info: "This will help you to submit the form <br/> Example:- Submit form",
+              },
+            ]}
+          />
+          {/* end form filling and submitting commands */}
           {/* open video commands -home page  */}
           <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
             Open Video Commands - Home Page
