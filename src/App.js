@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useHistory } from "react-router-dom";
 import { recognition } from "./api/voiceRecognition";
@@ -29,10 +29,42 @@ const App = () => {
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(12);
   const [countPages, setCountPages] = useState(1);
-
   const [videoRef, setVideoRef] = useState();
 
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const messageRef = useRef();
+  const submitRef = useRef();
+
+  const [newName, setNewName] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newMessage, setNewMessage] = useState("");
+
   const { speak } = useSpeechSynthesis();
+
+  const submitForm = (e) => {
+    e.preventDefault();
+
+    if (
+      !nameRef.current.value ||
+      !emailRef.current.value ||
+      !messageRef.current.value
+    ) {
+      toast.dark("Please fill all fields!");
+      speak({ text: "Please fill all fields!" });
+      return;
+    }
+
+    const data = {
+      name: nameRef.current.value,
+      email: emailRef.current.value,
+      message: messageRef.current.value,
+    };
+
+    console.log(data);
+    speak({ text: "Form submitted!" });
+    speak({ text: "Thank you for your message!" });
+  };
 
   // const scrollLocation = window.pageYOffset;
   const maxScroll =
@@ -236,7 +268,7 @@ const App = () => {
         command.includes("play video")
       ) {
         videoRef.playVideo();
-        console.log("working");
+        speak({ text: "Playing video" });
       }
       if (
         command.includes("stop") ||
@@ -245,6 +277,7 @@ const App = () => {
         command.includes("pause video")
       ) {
         videoRef.pauseVideo();
+        speak({ text: "Pausing video" });
       }
     }
 
@@ -432,6 +465,65 @@ const App = () => {
       toast.dark("Closed Command Table!");
     }
 
+    // fill form
+    if (window.location.pathname === "/contact") {
+      console.log(command);
+      if (
+        command.includes("insert") ||
+        command.includes("add") ||
+        command.includes("type")
+      ) {
+        if (command.includes("name")) {
+          speak({ text: "Filling name" });
+          const name = command.split("name")[1].trim();
+
+          if (!name) {
+            toast.dark("No name found!");
+            speak({ text: "No name found!" });
+            return;
+          }
+
+          setNewName(name);
+        }
+        if (command.includes("email")) {
+          speak({ text: "Filling email" });
+          const email = command.split("email")[1].trim();
+
+          if (!email) {
+            toast.dark("No email found!");
+            speak({ text: "No email found!" });
+            return;
+          }
+
+          setNewEmail(email);
+        }
+        if (command.includes("message")) {
+          speak({ text: "Filling message" });
+          const message = command.split("message")[1].trim();
+
+          if (!message) {
+            toast.dark("No message found!");
+            speak({ text: "No message found!" });
+            return;
+          }
+
+          setNewMessage(message);
+        }
+      } else if (
+        command.includes("submit form") ||
+        command.includes("submit")
+      ) {
+        submitRef.current.click();
+        setNewMessage("");
+        setNewEmail("");
+        setNewName("");
+      } else {
+        speak({
+          text: "Please say add, or, insert, or type, followed by , field name, and, your data. and say submit form to submit it or type and submit manually",
+        });
+      }
+    }
+
     // search commands
     if (command.includes("search video") || command.includes("search")) {
       if (
@@ -553,7 +645,21 @@ const App = () => {
           )}
         />
         <Route path="/about" component={() => <About />} />
-        <Route path="/contact" component={() => <Contact />} />
+        <Route
+          path="/contact"
+          component={() => (
+            <Contact
+              nameRef={nameRef}
+              emailRef={emailRef}
+              messageRef={messageRef}
+              submitRef={submitRef}
+              newName={newName}
+              newEmail={newEmail}
+              newMessage={newMessage}
+              submitForm={submitForm}
+            />
+          )}
+        />
         <Route path="/search">
           <Search setStopReco={setStopReco} />
         </Route>
