@@ -117,7 +117,9 @@ const App = () => {
   // recognition properties and commands
 
   recognition.onresult = async (event) => {
-    const command = event.results[0][0].transcript;
+    let command = event.results[0][0].transcript.toLowerCase();
+    command = command.replace(".", "");
+    console.log(command);
 
     // navigation
 
@@ -193,7 +195,6 @@ const App = () => {
               `/video/${videos.slice(0, 5)[parseInt(videoNo - 1)].id.videoId}`
             );
           } else {
-            console.log(currentCommand);
             console.log(popularVideos.slice(0, 5)[parseInt(videoNo - 1)]);
             history.push(
               `/video/${
@@ -289,6 +290,7 @@ const App = () => {
       command === "go backward"
     ) {
       history.goBack();
+      await speak({ text: "Going back" });
     }
     // go next command
     if (
@@ -297,6 +299,7 @@ const App = () => {
       command === "go forward"
     ) {
       history.goForward();
+      await speak({ text: "Going forward" });
     }
 
     // next page videos
@@ -304,9 +307,13 @@ const App = () => {
       (command === "next page" || command === "next") &&
       window.location.pathname === "/videos"
     ) {
-      console.log(pages);
       if (countPages !== pages) {
         nextPage();
+        await speak({ text: "Showing next page of videos" });
+        await speak({ text: `Showing Page ${countPages + 1} of ${pages}` });
+      } else {
+        await speak({ text: "This is the last page" });
+        await speak({ text: ` Total pages are ${pages}` });
       }
     }
     // prev page videos
@@ -320,6 +327,11 @@ const App = () => {
     ) {
       if (start > 0) {
         prevPage();
+        await speak({ text: "Showing previous page of videos" });
+        await speak({ text: `Showing Page ${countPages + 1} of ${pages}` });
+      } else {
+        await speak({ text: "This is the first page" });
+        await speak({ text: ` Total pages are ${pages}` });
       }
     }
 
@@ -328,6 +340,7 @@ const App = () => {
       recognition.stop();
       setStopReco(true);
       toast.dark("Taking commands stopped!");
+      await speak({ text: "Stopped taking commands!" });
     }
 
     // scrolling commands
@@ -338,6 +351,7 @@ const App = () => {
       command === "godown"
     ) {
       window.scrollBy(0, 100);
+      await speak({ text: `Scrolling down by 100px ` });
     } else if (
       command === "scroll up" ||
       command === "scrollup" ||
@@ -345,6 +359,7 @@ const App = () => {
       command === "goup"
     ) {
       window.scrollBy(0, -100);
+      await speak({ text: `Scrolling up by 100px ` });
     } else if (
       command === "go to top" ||
       command === "go top" ||
@@ -354,6 +369,7 @@ const App = () => {
       command === "gototop"
     ) {
       window.scrollTo(0, 0);
+      await speak({ text: `Scrolling to top of the page` });
     } else if (
       command === "go to bottom" ||
       command === "go bottom" ||
@@ -363,6 +379,7 @@ const App = () => {
       command === "gotobottom"
     ) {
       window.scrollTo(0, maxScroll);
+      await speak({ text: `Scrolling to bottom of the page` });
     } else if (
       command === "go to half" ||
       command === "gotohalf" ||
@@ -370,6 +387,7 @@ const App = () => {
       command === "scroll to half"
     ) {
       window.scrollTo(0, document.body.scrollHeight / 2);
+      await speak({ text: `Scrolling to half of the page` });
     } else if (
       command.includes("scroll to") ||
       command.includes("move to") ||
@@ -400,6 +418,7 @@ const App = () => {
           !/^[a-zA-Z].*/.test(number)
         ) {
           window.scrollTo(0, (parseInt(number) / 100) * maxScroll);
+          await speak({ text: `Scrolling to ${number}% of the page` });
         }
       }
       if (
@@ -425,12 +444,15 @@ const App = () => {
           if (command.includes("up") || command.includes("down")) {
             if (pert[1].trim() === "up") {
               window.scrollBy(0, -parseInt(number));
+              await speak({ text: `Scrolling up by ${number}px` });
             }
             if (pert[1].trim() === "down") {
               window.scrollBy(0, parseInt(number));
+              await speak({ text: `Scrolling down by ${number}px` });
             }
           } else {
             window.scrollTo(0, parseInt(number));
+            await speak({ text: `Scrolling to ${number}px` });
           }
         }
       }
@@ -467,16 +489,15 @@ const App = () => {
 
     // fill form
     if (window.location.pathname === "/contact") {
-      console.log(command);
       if (
         command.includes("insert") ||
         command.includes("add") ||
         command.includes("type")
       ) {
         if (command.includes("name")) {
-          speak({ text: "Filling name" });
           const name = command.split("name")[1].trim();
 
+          speak({ text: `Filling name field with ${name}` });
           if (!name) {
             toast.dark("No name found!");
             speak({ text: "No name found!" });
@@ -486,8 +507,9 @@ const App = () => {
           setNewName(name);
         }
         if (command.includes("email")) {
-          speak({ text: "Filling email" });
           const email = command.split("email")[1].trim();
+
+          speak({ text: `Filling email field with ${email}` });
 
           if (!email) {
             toast.dark("No email found!");
@@ -498,8 +520,9 @@ const App = () => {
           setNewEmail(email);
         }
         if (command.includes("message")) {
-          speak({ text: "Filling message" });
           const message = command.split("message")[1].trim();
+
+          speak({ text: `Filling message field with ${message}` });
 
           if (!message) {
             toast.dark("No message found!");
