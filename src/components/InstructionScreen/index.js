@@ -63,7 +63,7 @@ const InstructionScreen = ({ stopReco, setInstructionScreen, setStopReco }) => {
           {/* end navigation commands */}
           {/* form filling and submitting commands */}
           <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
-            Navigation Commands
+            Form Filling and Submission Commands
           </p>
           <CommandsTable
             cols={["commands", "use"]}
@@ -190,6 +190,7 @@ const InstructionScreen = ({ stopReco, setInstructionScreen, setStopReco }) => {
             ]}
           />
           {/* end go back/next route or by history of the page commands  */}
+
           {/* scrolling commands  */}
           <p className="bg-primary text-white border-bottom py-3 my-4 text-center">
             Scrolling commands
