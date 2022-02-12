@@ -168,10 +168,15 @@ const App = () => {
     // video selection
 
     if (command.startsWith("open video")) {
-      if (command.replace("open video", "").trim() === "") {
-        return await speak({
-          text: "Please mention the video number also, or, video number with category",
-        });
+      if (
+        window.location.pathname === "/" ||
+        window.location.pathname === "/videos"
+      ) {
+        if (command.replace("open video", "").trim() === "") {
+          return await speak({
+            text: "Please mention the video number also, or, video number with category",
+          });
+        }
       }
       if (window.location.pathname === "/") {
         if (
@@ -183,34 +188,46 @@ const App = () => {
             text: "This Video number is not avaliable. please select videos with number in the view range , that range is from, 1 to 5 , with in each category",
           });
         }
+
         if (command.includes("from")) {
           const currentCommand = command;
           let videoNo = currentCommand.match(/\d+/);
+
           if (command.includes("one")) {
             videoNo = "1";
           }
-          const Package = command.split("from").reverse()[0];
-          if (Package.trim() === "uploads") {
-            history.push(
-              `/video/${videos.slice(0, 5)[parseInt(videoNo - 1)].id.videoId}`
-            );
+
+          if (videoNo !== null) {
+            const Package = command.split("from").reverse()[0];
+            if (Package.trim() === "uploads") {
+              history.push(
+                `/video/${videos.slice(0, 5)[parseInt(videoNo - 1)].id.videoId}`
+              );
+            } else {
+              console.log(popularVideos.slice(0, 5)[parseInt(videoNo - 1)]);
+              history.push(
+                `/video/${
+                  popularVideos.slice(0, 5)[parseInt(videoNo - 1)].id.videoId
+                }`
+              );
+              await speak({
+                text: `opening video `,
+              });
+            }
           } else {
-            console.log(popularVideos.slice(0, 5)[parseInt(videoNo - 1)]);
-            history.push(
-              `/video/${
-                popularVideos.slice(0, 5)[parseInt(videoNo - 1)].id.videoId
-              }`
-            );
             await speak({
-              text: `opening video `,
+              text: "Please say the video number , for example, video number 1 , or, video number with category, for example, video number 1 from popular videos, or, video number 1 from uploads",
             });
           }
         } else {
-          const videoNo = command
+          let videoNo = command
             .split("video")
             .reverse()[0]
             .split("")
             .reverse()[0];
+          if (command.includes("one")) {
+            videoNo = "1";
+          }
           if (!openVideoHome) {
             setSelectedVideos([
               {
@@ -265,7 +282,7 @@ const App = () => {
       if (
         command.includes("start") ||
         command.includes("play") ||
-        command.includes("video") ||
+        command.includes("start video") ||
         command.includes("play video")
       ) {
         videoRef.playVideo();
@@ -467,6 +484,9 @@ const App = () => {
       setStopReco(false);
       setInstructionScreen(true);
       await speak({ text: "Opened Command Table" });
+      await speak({
+        text: "Click on next or close button to start taking commands again!",
+      });
       toast.dark(
         "Click on next or close button to start taking commands again!"
       );
