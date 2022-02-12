@@ -163,6 +163,7 @@ const App = () => {
           text: "This Page is not available. Please say 'go back', to go back",
         });
       }
+      return;
     }
 
     // video selection
@@ -594,8 +595,7 @@ const App = () => {
           }
 
           setNewName(name);
-        }
-        if (command.includes("email")) {
+        } else if (command.includes("email")) {
           const email = command.split("email")[1].trim();
 
           speak({ text: `Filling email field with ${email}` });
@@ -607,8 +607,7 @@ const App = () => {
           }
 
           setNewEmail(email);
-        }
-        if (command.includes("message")) {
+        } else if (command.includes("message")) {
           const message = command.split("message")[1].trim();
 
           speak({ text: `Filling message field with ${message}` });
