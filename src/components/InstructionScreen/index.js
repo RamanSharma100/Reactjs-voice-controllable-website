@@ -1,11 +1,14 @@
 import React from "react";
 import { recognition } from "../../api/voiceRecognition";
+import { useSpeechSynthesis } from "react-speech-kit";
 
 import "./style.scss";
 
 import CommandsTable from "./CommandsTable";
+import { toast } from "react-toastify";
 
 const InstructionScreen = ({ stopReco, setInstructionScreen, setStopReco }) => {
+  const { speak } = useSpeechSynthesis();
   return (
     <div className="col-md-12 instructions">
       <div className="card col-md-6 mx-auto mt-5 px-5 py-2">
@@ -14,11 +17,13 @@ const InstructionScreen = ({ stopReco, setInstructionScreen, setStopReco }) => {
           <button
             type="button"
             className="close mb-3"
-            onClick={() => {
+            onClick={async () => {
               setInstructionScreen(false);
+              toast.dark("Start taking commands!");
               if (stopReco) {
                 recognition.start();
               }
+              await speak({ text: "Start taking commands!" });
               setStopReco(false);
             }}
           >

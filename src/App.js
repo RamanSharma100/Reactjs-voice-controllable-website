@@ -167,12 +167,19 @@ const App = () => {
 
     // video selection
 
-    if (command.startsWith("open video")) {
+    if (
+      command.startsWith("open video") ||
+      command.startsWith("open video #")
+    ) {
       if (
         window.location.pathname === "/" ||
         window.location.pathname === "/videos"
       ) {
-        if (command.replace("open video", "").trim() === "") {
+        if (
+          command.replace("open video", "").trim() === "" ||
+          command.replace("open video number", "").trim() === "" ||
+          command.replace("open video #", "").trim() === ""
+        ) {
           return await speak({
             text: "Please mention the video number also, or, video number with category",
           });
@@ -180,13 +187,23 @@ const App = () => {
       }
       if (window.location.pathname === "/") {
         if (
-          command.replace("open video", "").trim() !== "one" &&
-          (parseInt(command.replace("open video", "").trim()) < 1 ||
-            parseInt(command.replace("open video", "").trim()) > videos.length)
+          command.replace("open video number", "").trim() !== "one" &&
+          (parseInt(
+            command.toLowerCase().replace("open video number", "").trim()
+          ) < 1 ||
+            parseInt(
+              command.toLowerCase().replace("open video number", "").trim()
+            ) > 5 ||
+            parseInt(
+              command.toLowerCase().replace("open video #", "").trim()
+            ) === 0 ||
+            parseInt(command.toLowerCase().replace("open video #", "").trim()) >
+              5)
         ) {
-          return await speak({
+          await speak({
             text: "This Video number is not avaliable. please select videos with number in the view range , that range is from, 1 to 5 , with in each category",
           });
+          return;
         }
 
         if (command.includes("from")) {
@@ -200,19 +217,21 @@ const App = () => {
           if (videoNo !== null) {
             const Package = command.split("from").reverse()[0];
             if (Package.trim() === "uploads") {
+              await speak({
+                text: `opening video `,
+              });
               history.push(
                 `/video/${videos.slice(0, 5)[parseInt(videoNo - 1)].id.videoId}`
               );
             } else {
-              console.log(popularVideos.slice(0, 5)[parseInt(videoNo - 1)]);
+              await speak({
+                text: `opening video `,
+              });
               history.push(
                 `/video/${
                   popularVideos.slice(0, 5)[parseInt(videoNo - 1)].id.videoId
                 }`
               );
-              await speak({
-                text: `opening video `,
-              });
             }
           } else {
             await speak({
@@ -225,6 +244,17 @@ const App = () => {
             .reverse()[0]
             .split("")
             .reverse()[0];
+
+          if (
+            parseInt(
+              command.toLowerCase().replace("open video #", "").trim()
+            ) !== ""
+          ) {
+            videoNo = parseInt(
+              command.toLowerCase().replace("open video #", "").trim()
+            );
+          }
+
           if (command.includes("one")) {
             videoNo = "1";
           }
@@ -247,6 +277,7 @@ const App = () => {
             });
           } else {
             if (parseInt(videoNo) < 6 && parseInt(videoNo) > 0) {
+              await speak({ text: "opening video" });
               history.push(
                 `/video/${
                   selectedVideos[parseInt(videoNo - 1)].video.id.videoId
@@ -259,21 +290,59 @@ const App = () => {
         }
       }
       if (window.location.pathname === "/videos") {
-        const videoNo = command
+        let videoNo = command
           .split("video")
           .reverse()[0]
-          .split("")
+          .split(" ")
           .reverse()[0];
 
-        if (parseInt(videoNo) < 13 && parseInt(videoNo) > 0) {
+        if (videoNo.includes("#")) {
+          videoNo = videoNo.split("#")[0];
+        }
+
+        if (command.includes("one")) {
+          videoNo = "1";
+        }
+
+        if (
+          parseInt(videoNo) < end - start + 1 &&
+          parseInt(videoNo) > start - start
+        ) {
+          let replacedString;
+          const videoTitle = videos.slice(start, end)[parseInt(videoNo - 1)]
+            .snippet.title;
+
+          if (videoTitle.startsWith("#")) {
+            let replacedString = videos
+              .slice(start, end)
+              [parseInt(videoNo - 1)].snippet.title.replace("#", "");
+
+            await speak({
+              text: `opening video ${replacedString.substring(
+                1,
+                replacedString.length
+              )}`,
+            });
+          } else {
+            await speak({
+              text: `opening video ${videoTitle}`,
+            });
+          }
           history.push(
             `/video/${
               videos.slice(start, end)[parseInt(videoNo - 1)].id.videoId
             }`
           );
+          return;
+        } else {
+          await speak({
+            text: `This video number is not avaliable. please select videos with number in the view range , that range is from, ${
+              start + 1
+            } to ${end}, or say next or previous to paginate`,
+          });
+          setSelectedVideos(false);
+          setOpenVideoHome(false);
         }
-        setSelectedVideos(false);
-        setOpenVideoHome(false);
       }
     }
 
@@ -285,8 +354,8 @@ const App = () => {
         command.includes("start video") ||
         command.includes("play video")
       ) {
-        videoRef.playVideo();
         speak({ text: "Playing video" });
+        videoRef.playVideo();
       }
       if (
         command.includes("stop") ||
@@ -294,8 +363,8 @@ const App = () => {
         command.includes("stop video") ||
         command.includes("pause video")
       ) {
-        videoRef.pauseVideo();
         speak({ text: "Pausing video" });
+        videoRef.pauseVideo();
       }
     }
 
