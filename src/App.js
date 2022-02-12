@@ -619,6 +619,10 @@ const App = () => {
           }
 
           setNewMessage(message);
+        } else {
+          speak({
+            text: "Please say add, or, insert, or type, followed by , field name, and, your data. and say submit form to submit it or type and submit manually",
+          });
         }
       } else if (
         command.includes("submit form") ||
@@ -628,10 +632,6 @@ const App = () => {
         setNewMessage("");
         setNewEmail("");
         setNewName("");
-      } else {
-        speak({
-          text: "Please say add, or, insert, or type, followed by , field name, and, your data. and say submit form to submit it or type and submit manually",
-        });
       }
     }
 
