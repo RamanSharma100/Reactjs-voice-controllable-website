@@ -246,20 +246,20 @@ const App = () => {
             .split("")
             .reverse()[0];
 
-          if (
-            parseInt(
-              command.toLowerCase().replace("open video #", "").trim()
-            ) !== ""
-          ) {
-            videoNo = parseInt(
-              command.toLowerCase().replace("open video #", "").trim()
-            );
-          }
-
-          if (command.includes("one")) {
-            videoNo = "1";
-          }
           if (!openVideoHome) {
+            if (
+              parseInt(
+                command.toLowerCase().replace("open video #", "").trim()
+              ) !== ""
+            ) {
+              videoNo = parseInt(
+                command.toLowerCase().replace("open video #", "").trim()
+              );
+            }
+
+            if (command.includes("one")) {
+              videoNo = "1";
+            }
             setSelectedVideos([
               {
                 from: "uploads",
@@ -277,16 +277,25 @@ const App = () => {
               text: "Please select videos from categories given in dialog box",
             });
           } else {
-            if (parseInt(videoNo) < 6 && parseInt(videoNo) > 0) {
+            console.log(videoNo);
+            if (
+              parseInt(videoNo) < selectedVideos.length + 1 &&
+              parseInt(videoNo) > 0
+            ) {
               await speak({ text: "opening video" });
               history.push(
                 `/video/${
                   selectedVideos[parseInt(videoNo - 1)].video.id.videoId
                 }`
               );
+              setSelectedVideos(false);
+              setOpenVideoHome(false);
+              return;
+            } else {
+              await speak({
+                text: "This Video number is not avaliable. please select videos with number in the view range , that range is from, 1 to 2 ",
+              });
             }
-            setSelectedVideos(false);
-            setOpenVideoHome(false);
           }
         }
       }
@@ -314,7 +323,7 @@ const App = () => {
             .snippet.title;
 
           if (videoTitle.startsWith("#")) {
-            let replacedString = videos
+            replacedString = videos
               .slice(start, end)
               [parseInt(videoNo - 1)].snippet.title.replace("#", "");
 
