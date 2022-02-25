@@ -1,4 +1,4 @@
-# React Js Voice Controlled Simple Website [Version 1.0]
+# React Js Voice Controlled Simple Website [Version 1.1]
 
 This is voice controlled website version 1.1.
 
