@@ -1,11 +1,11 @@
 $primary: #2846dc;
 $secondary: #828282;
 $theme-colors: (
-  "primary": $primary,
-  "secondary": $secondary,
+  'primary': $primary,
+  'secondary': $secondary,
 );
 
-@import "~bootstrap/scss/bootstrap";
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
 
 ::-webkit-scrollbar {
   width: 5px;

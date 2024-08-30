@@ -1,10 +1,10 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { useSpeechSynthesis } from "react-speech-kit";
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useSpeechSynthesis } from 'react-speech-kit';
 
 const Search = ({ setStopReco }) => {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const [videos, setVideos] = useState([]);
   const [videosLoading, setVideosLoading] = useState(true);
   const [typing, setTyping] = useState(false);
@@ -15,24 +15,24 @@ const Search = ({ setStopReco }) => {
   const searchVideos = (string) => {
     setTyping(false);
     axios
-      .get(process.env.React_App_Youtube_API, {
+      .get(import.meta.env.VITE_APP_Youtube_API, {
         params: {
-          part: "snippet",
-          type: "video",
+          part: 'snippet',
+          type: 'video',
           maxResults: 25,
           q: string.trim(),
-          key: process.env.React_App_Youtube_API_Key,
+          key: import.meta.env.VITE_APP_Youtube_API_Key,
         },
       })
       .then(async (res) => {
         setVideos(res.data.items);
         setVideosLoading(false);
-        await speak({ text: "Videos Search Complete. Here are the results" });
+        await speak({ text: 'Videos Search Complete. Here are the results' });
       })
       .catch(async (err) => {
         console.log(err.message);
         await speak({
-          text: "Something Went Wrong Please check your internet connection and console for the error",
+          text: 'Something Went Wrong Please check your internet connection and console for the error',
         });
         setVideosLoading(false);
       });
@@ -47,7 +47,7 @@ const Search = ({ setStopReco }) => {
     } else {
       setVideosLoading(true);
       setVideos([]);
-      setSearchText("");
+      setSearchText('');
     }
   }, [location]);
 
@@ -96,8 +96,7 @@ const Search = ({ setStopReco }) => {
               </h1>
               <form
                 className="form-group mt-5 border-bottom "
-                onSubmit={() => searchVideos(searchText)}
-              >
+                onSubmit={() => searchVideos(searchText)}>
                 <input
                   type="search"
                   className="form-control border-0 shadow-none"

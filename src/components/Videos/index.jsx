@@ -1,8 +1,8 @@
-import React from "react";
-import { shallowEqual, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { shallowEqual, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-import "./index.scss";
+import './index.scss';
 
 const Videos = ({ start, end, nextPage, prevPage, countPages }) => {
   const { videosLoading, videos } = useSelector(
@@ -28,8 +28,7 @@ const Videos = ({ start, end, nextPage, prevPage, countPages }) => {
             {videos.slice(start, end).map((video, index) => (
               <div
                 className="card px-0 col-md-4 me-1 mb-3"
-                key={index + 295648}
-              >
+                key={index + 295648}>
                 <img
                   className="card-img-top"
                   src={video.snippet.thumbnails.high.url}
@@ -47,8 +46,7 @@ const Videos = ({ start, end, nextPage, prevPage, countPages }) => {
                 <div className="card-footer bg-white">
                   <Link
                     to={`/video/${video.id.videoId}`}
-                    className="btn btn-primary btn-block"
-                  >
+                    className="btn btn-primary btn-block">
                     <i className="fa fa-eye"></i> See Video
                   </Link>
                 </div>
@@ -57,21 +55,19 @@ const Videos = ({ start, end, nextPage, prevPage, countPages }) => {
           </>
         )}
       </div>
-      <div className="row my-5 px-4 align-items-center justify-content-around">
+      <div className="d-flex my-5 px-4 align-items-center justify-content-around">
         <button
           type="button"
           className="btn btn-primary"
           disabled={start === 0}
-          onClick={() => prevPage()}
-        >
+          onClick={() => prevPage()}>
           <i className="fas fa-angle-left"></i> Prev Page
         </button>
         <button
           type="button"
           className="btn btn-primary"
           disabled={videos.length - (end + 1) < 0}
-          onClick={() => nextPage()}
-        >
+          onClick={() => nextPage()}>
           Next Page <i className="fas fa-angle-right"></i>
         </button>
       </div>

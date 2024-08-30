@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const About = () => {
   return (
@@ -6,12 +6,7 @@ const About = () => {
       <h1 className="display-2 text-center my-3">About Creator</h1>
       <div className="row mt-5">
         <div className="col-md-5">
-          <img
-            src="https://media-exp1.licdn.com/dms/image/C4E03AQERRBhd66Cidw/profile-displayphoto-shrink_400_400/0/1593945613846?e=1634169600&v=beta&t=nc_ULhB9Ir9kF2Zn1F1AxOoVL1DAVc9-NJ8-s04vhWk"
-            alt=""
-            className="border"
-            width="100%"
-          />
+          <img src="" alt="" className="border" width="100%" />
         </div>
         <div className="col-md-7 py-0 px-4">
           <h1 className="display-2 py-0">Raman Sharma</h1>
@@ -28,8 +23,7 @@ const About = () => {
                   href="https://www.youtube.com/fullyworldwebtutorials"
                   target="_blank"
                   className="px-5"
-                  rel="noreferrer"
-                >
+                  rel="noreferrer">
                   Fullyworld Web Tutorials
                 </a>
               </td>
@@ -43,8 +37,7 @@ const About = () => {
                   href="https://www.linkedin.com/in/raman-sharma-2169b0139/"
                   target="_blank"
                   className="px-5"
-                  rel="noreferrer"
-                >
+                  rel="noreferrer">
                   Raman Sharma
                 </a>
               </td>
@@ -58,8 +51,7 @@ const About = () => {
                   href="https://github.com/RamanSharma100"
                   target="_blank"
                   className="px-5"
-                  rel="noreferrer"
-                >
+                  rel="noreferrer">
                   Raman Sharma
                 </a>
               </td>
@@ -73,8 +65,7 @@ const About = () => {
                   href="https://codepen.io/Fullyworld_Web_Tutorials/"
                   target="_blank"
                   className="px-5"
-                  rel="noreferrer"
-                >
+                  rel="noreferrer">
                   Fullyworld Web Tutorials
                 </a>
               </td>
@@ -88,8 +79,7 @@ const About = () => {
                   href="https://instagram.com/fullyworld_web_tutorials"
                   target="_blank"
                   className="px-5"
-                  rel="noreferrer"
-                >
+                  rel="noreferrer">
                   Raman Sharma (@fullyworld_web_tutorials)
                 </a>
               </td>

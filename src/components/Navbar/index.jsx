@@ -1,15 +1,14 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
-import { toast } from "react-toastify";
+import React from 'react';
+import { Link, NavLink } from 'react-router-dom';
 
 const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg py-2 navbar-dark bg-primary">
-      <Link to="/" className="navbar-brand ml-5">
+      <Link to="/" className="navbar-brand ms-5">
         Voice Controlled Website
       </Link>
 
-      <ul className="navbar-nav ml-auto mr-5">
+      <ul className="navbar-nav ms-auto me-5">
         <li className="nav-item">
           <NavLink exact to="/" className="nav-link">
             Home
@@ -30,11 +29,10 @@ const Navbar = () => {
             Contact
           </NavLink>
         </li>
-        <li className="nav-item ml-5">
+        <li className="nav-item ms-5">
           <Link
-            to={{ pathname: "/search", state: { text: "" } }}
-            className="btn btn-outline-light btn-sm mt-1"
-          >
+            to={{ pathname: '/search', state: { text: '' } }}
+            className="btn btn-light btn-sm mt-1">
             <i className="fa fa-search"></i> Search
           </Link>
         </li>

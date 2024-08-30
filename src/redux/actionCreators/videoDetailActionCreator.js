@@ -1,22 +1,22 @@
-import axios from "axios";
+import axios from 'axios';
 
 const setVideoDetailLoading = (data) => ({
-  type: "SET_VIDEO_DETAIL_LOADING",
+  type: 'SET_VIDEO_DETAIL_LOADING',
   payload: data,
 });
 const setVideoDetail = (data) => ({
-  type: "SET_VIDEO_DETAIL",
+  type: 'SET_VIDEO_DETAIL',
   payload: data,
 });
 
 export const addVideoDetail = (id) => (dispatch) => {
   dispatch(setVideoDetailLoading(true));
   axios
-    .get("https://www.googleapis.com/youtube/v3/videos", {
+    .get('https://www.googleapis.com/youtube/v3/videos', {
       params: {
-        part: "snippet,statistics",
+        part: 'snippet,statistics',
         id,
-        key: process.env.React_App_Youtube_API_Key,
+        key: import.meta.env.VITE_APP_Youtube_API_Key,
       },
     })
     .then((res) => {
