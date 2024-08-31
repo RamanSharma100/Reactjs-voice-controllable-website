@@ -4,6 +4,53 @@ This is voice controlled website version 1.1.
 
 [checkout the blog](https://ramansharma.hashnode.dev/voice-controllable-website)
 
+## Preprerequisite
+
+1. Enable Youtube Data API v3 on Google Cloud Console
+2. Youtube API key from Google Cloud Console
+3. Nodejs
+4. Python (may or may not required)
+5. Browser
+6. Microphone
+
+## Installation
+
+1. Clone this repo
+
+   ```bash
+   git clone git@github.com:RamanSharma100/Reactjs-voice-controllable-website.git
+   ```
+
+2. download the dependencies
+
+   ```bash
+   npm install
+   ```
+
+3. Edit a `.env` file in root directory and add the following
+
+   ```bash
+   VITE_APP_YOUTUBE_API_KEY=YOUR_YOUTUBE_API
+   VIET_APP_YOUTUBE_API_URL=https://www.googleapis.com/youtube/v3
+   ```
+
+4. Run the project
+
+   ```bash
+   npm run dev
+   ```
+
+5. Open the browser and go to `http://localhost:5173`
+
+## How to use
+
+1. Open the website
+2. Click on the close icon on top right corner to start voice commands
+3. Say the commands
+4. Stop the voice commands by saying `Stop taking commands`
+5. You can also stop the voice commands by clicking on the mic icon on top bottom right corner
+6. Follow the commands given below
+
 ## Features in version 1.0
 
     1. Voice controlled navigation with all validations
@@ -17,7 +64,7 @@ This is voice controlled website version 1.1.
     6. Voice controlled search
     7. Voice controlled video controls
     8. Voice controlled form filling
-    
+
     Not only this it is giving responses also
 
 ## This is having more than 35+ commands
